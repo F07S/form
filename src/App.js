@@ -12,7 +12,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Result State
-  const [result, setResult] = useState("");
+  let [result, setResult] = useState(false);
 
   // onChange Input Handlers
   const handleNameChange = (event) => {
@@ -31,68 +31,76 @@ function App() {
   };
   return (
     <div className="App">
-      <form
-        className="form-box"
-        onSubmit={(event) => {
-          event.preventDefault();
-
-          // condition identical passwords
-          if (password !== confirmPassword) {
-            alert("Your passwords don't match.");
-          } else {
-            document.querySelector("#create").classList.toggle("disappear") &&
-              document.querySelector("#results").classList.add("appear");
-          }
-        }}
-      >
-        <div id="create">
-          <h1>Create Account</h1>
-          <div>
-            <span>Name</span>
-            <input
-              value={name}
-              type="text"
-              placeholder="name"
-              onChange={handleNameChange}
-            />
+      {password === confirmPassword && result ? (
+        <section>
+          <h1>Results</h1>
+          <div>{name}</div>
+          <div>{email}</div>
+          <div>{password}</div>
+          <button
+            onClick={() => {
+              setResult((result = false));
+              // condition identical passwords
+            }}
+          >
+            Edit your information
+          </button>
+        </section>
+      ) : (
+        <form
+          className="form-box"
+          onSubmit={(event) => {
+            event.preventDefault();
+            // condition identical passwords
+            {
+              password !== confirmPassword
+                ? alert("Your passwords don't match.")
+                : setResult(true);
+            }
+          }}
+        >
+          <div id="create">
+            <h1>Create Account</h1>
+            <div>
+              <span>Name</span>
+              <input
+                value={name}
+                type="text"
+                placeholder="name"
+                onChange={handleNameChange}
+              />
+            </div>
+            <div>
+              <span>Email</span>
+              <input
+                value={email}
+                type="email"
+                placeholder="email"
+                onChange={handleEmailChange}
+              />
+            </div>
+            <div>
+              <span>Password</span>
+              <input
+                value={password}
+                type="password"
+                placeholder="password"
+                onChange={handlePasswordChange}
+              />
+            </div>
+            <div>
+              <span>Confirm your password</span>
+              <input
+                value={confirmPassword}
+                type="password"
+                placeholder="confirm password"
+                onChange={handleConfirmPasswordChange}
+              />
+            </div>
+            <button type="submit">Register</button>
           </div>
-          <div>
-            <span>Email</span>
-            <input
-              value={email}
-              type="email"
-              placeholder="email"
-              onChange={handleEmailChange}
-            />
-          </div>
-          <div>
-            <span>Password</span>
-            <input
-              value={password}
-              type="password"
-              placeholder="password"
-              onChange={handlePasswordChange}
-            />
-          </div>
-          <div>
-            <span>Confirm your password</span>
-            <input
-              value={confirmPassword}
-              type="password"
-              placeholder="confirm password"
-              onChange={handleConfirmPasswordChange}
-            />
-          </div>
-          <button type="submit">Register</button>
-        </div>
-      </form>
-      <section id="results">
-        <h1>Results</h1>
-        <div>{name}</div>
-        <div>{email}</div>
-        <div>{password}</div>
-        <button>Edit your information</button>
-      </section>
+        </form>
+      )}
     </div>
   );
 }
